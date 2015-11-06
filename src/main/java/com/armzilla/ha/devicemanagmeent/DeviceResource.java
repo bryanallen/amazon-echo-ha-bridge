@@ -39,6 +39,8 @@ public class DeviceResource {
         deviceEntry.setDeviceType(device.getDeviceType());
         deviceEntry.setOnUrl(device.getOnUrl());
         deviceEntry.setOffUrl(device.getOffUrl());
+        deviceEntry.setOnUrlBody(device.getOnUrlBody());
+        deviceEntry.setOffUrlBody(device.getOffUrlBody());
         deviceEntry.setContentType(device.getContentType());
         deviceEntry.setContentBody(device.getContentBody());
         deviceEntry.setHttpVerb(device.getHttpVerb());
@@ -59,6 +61,8 @@ public class DeviceResource {
         deviceEntry.setDeviceType(device.getDeviceType());
         deviceEntry.setOnUrl(device.getOnUrl());
         deviceEntry.setOffUrl(device.getOffUrl());
+        deviceEntry.setOnUrlBody(device.getOnUrlBody());
+        deviceEntry.setOffUrlBody(device.getOffUrlBody());
 
         deviceRepository.save(deviceEntry);
 

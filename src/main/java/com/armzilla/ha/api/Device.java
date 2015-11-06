@@ -8,6 +8,8 @@ public class Device {
     private String deviceType;
     private String offUrl;
     private String onUrl;
+    private String offUrlBody;
+    private String onUrlBody;
     private String httpVerb;
     private String contentType;
     private String contentBody;
@@ -67,4 +69,20 @@ public class Device {
     public void setOnUrl(String onUrl) {
         this.onUrl = onUrl;
     }
+
+	public String getOnUrlBody() {
+		return onUrlBody;
+	}
+
+	public void setOnUrlBody(String onUrlBody) {
+		this.onUrlBody = onUrlBody;
+	}
+
+	public String getOffUrlBody() {
+		return offUrlBody;
+	}
+
+	public void setOffUrlBody(String offUrlBody) {
+		this.offUrlBody = offUrlBody;
+	}
 }

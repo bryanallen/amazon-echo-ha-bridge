@@ -94,19 +94,28 @@ angular.module('configurator', [])
         };
     }])
 
-    .controller('ViewingController', ["$scope", "bridgeService", function ($scope, bridgeService, $http) {
+    .controller('ViewingController', ["$scope", "$http", "$timeout", "bridgeService", function ($scope, $http, $timeout, bridgeService) {
         bridgeService.viewDevices();
         $scope.testSuccess = false;
+        $scope.testFail = false;
         $scope.bridge = bridgeService.state;
         $scope.deleteDevice = function (device) {
             bridgeService.deleteDevice(device.id);
         };
         $scope.testUrl = function (httpVerb, url, body) {
         	if (httpVerb == "POST") {
-		    	$http.post(url, body).success(function(data, status) {
-		            $scope.testSuccess = true;
+        		$http({
+        		    method: 'POST',
+        		    url: url,
+        		    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        		    data: body
+        		}).then(function successCallback(response) {
+        			$scope.testSuccess = true;
 		            $timeout(function() { $scope.testSuccess = false; }, 3000);
-		        });
+        		  }, function errorCallback(response) {
+          			$scope.testFail = true;
+  		            $timeout(function() { $scope.testSuccess = false; }, 3000);
+        		  });
         	} else {
 		    	$http.get(url).success(function(data, status) {
 		            $scope.testSuccess = true;
