@@ -94,7 +94,7 @@ angular.module('configurator', [])
         };
     }])
 
-    .controller('ViewingController', ["$scope", "bridgeService", function ($scope, bridgeService) {
+    .controller('ViewingController', ["$scope", "bridgeService", function ($scope, bridgeService, $http) {
         bridgeService.viewDevices();
         $scope.testSuccess = false;
         $scope.bridge = bridgeService.state;
@@ -105,10 +105,12 @@ angular.module('configurator', [])
         	if (httpVerb == "POST") {
 		    	$http.post(url, body).success(function(data, status) {
 		            $scope.testSuccess = true;
+		            $timeout(function() { $scope.testSuccess = false; }, 3000);
 		        });
         	} else {
 		    	$http.get(url).success(function(data, status) {
 		            $scope.testSuccess = true;
+		            $timeout(function() { $scope.testSuccess = false; }, 3000);
 		        });
         	}
         };
