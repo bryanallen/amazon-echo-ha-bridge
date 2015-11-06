@@ -34,6 +34,7 @@ angular.module('configurator', [])
                     offUrl: offUrl,
                     onUrlBody: onUrlBody,
                     offUrlBody: offUrlBody,
+                    contentType: "application/json"
                 }).then(
                     function (response) {
                         self.viewDevices();
@@ -54,6 +55,7 @@ angular.module('configurator', [])
                     offUrl: offUrl,
                     onUrlBody: onUrlBody,
                     offUrlBody: offUrlBody,
+                    contentType: "application/json"
                 }).then(
                     function (response) {
                         self.viewDevices();
