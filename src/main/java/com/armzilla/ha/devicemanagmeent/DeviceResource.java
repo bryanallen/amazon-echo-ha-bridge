@@ -63,6 +63,7 @@ public class DeviceResource {
         deviceEntry.setOffUrl(device.getOffUrl());
         deviceEntry.setOnUrlBody(device.getOnUrlBody());
         deviceEntry.setOffUrlBody(device.getOffUrlBody());
+        deviceEntry.setHttpVerb(device.getHttpVerb());
 
         deviceRepository.save(deviceEntry);
 
