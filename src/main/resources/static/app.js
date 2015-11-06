@@ -96,12 +96,21 @@ angular.module('configurator', [])
 
     .controller('ViewingController', ["$scope", "bridgeService", function ($scope, bridgeService) {
         bridgeService.viewDevices();
+        $scope.testSuccess = false;
         $scope.bridge = bridgeService.state;
         $scope.deleteDevice = function (device) {
             bridgeService.deleteDevice(device.id);
         };
-        $scope.testUrl = function (url) {
-            window.open(url, "_blank");
+        $scope.testUrl = function (httpVerb, url, body) {
+        	if (httpVerb == "POST") {
+		    	$http.post(url, body).success(function(data, status) {
+		            $scope.testSuccess = true;
+		        });
+        	} else {
+		    	$http.get(url).success(function(data, status) {
+		            $scope.testSuccess = true;
+		        });
+        	}
         };
         $scope.setBridgeUrl = function (url) {
             bridgeService.state.base = url;

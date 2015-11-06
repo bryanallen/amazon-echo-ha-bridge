@@ -84,10 +84,11 @@
                     <td>{{device.name}}</td>
                     <td>{{device.deviceType}}</td>
                     <td>
-                        <button class="btn btn-info" type="submit" ng-click="testUrl(device.onUrl)">ON</button>
-                        <button class="btn btn-info" type="submit" ng-click="testUrl(device.offUrl)">OFF</button>
+                        <button class="btn btn-info" type="submit" ng-click="testUrl(device.httpVerb, device.onUrl, deviceOnUrlBody)">ON</button>
+                        <button class="btn btn-info" type="submit" ng-click="testUrl(device.httpVerb, device.offUrl, device.offUrlBody)">OFF</button>
                         <button class="btn btn-danger" type="submit" ng-click="editDevice(device)">Edit</button>
                         <button class="btn btn-danger" type="submit" ng-click="deleteDevice(device)">Delete</button>
+                        <span class="glyphicon glypicon-ok-circle" ng-show="testSuccess" style="color:blue"></span>
                     </td>
                 </tr>
             </table>
