@@ -21,7 +21,7 @@ angular.module('configurator', [])
             );
         };
 
-        this.addDevice = function (id, name, type, onUrl, offUrl) {
+        this.addDevice = function (id, name, type, httpVerb, onUrl, offUrl, onUrlBody, offUrlBody) {
             this.state.error = "";
             if (id) {
                 var putUrl = this.state.base + "/" + id;
@@ -29,8 +29,11 @@ angular.module('configurator', [])
                     id: id,
                     name: name,
                     deviceType: type,
+                    httpVerb: httpVerb,
                     onUrl: onUrl,
-                    offUrl: offUrl
+                    offUrl: offUrl,
+                    onUrlBody: onUrlBody,
+                    offUrlBody: offUrlBody,
                 }).then(
                     function (response) {
                         self.viewDevices();
@@ -46,8 +49,11 @@ angular.module('configurator', [])
                 return $http.post(this.state.base, {
                     name: name,
                     deviceType: type,
+                    httpVerb: httpVerb,
                     onUrl: onUrl,
-                    offUrl: offUrl
+                    offUrl: offUrl,
+                    onUrlBody: onUrlBody,
+                    offUrlBody: offUrlBody,
                 }).then(
                     function (response) {
                         self.viewDevices();
@@ -77,11 +83,14 @@ angular.module('configurator', [])
             );
         };
 
-        this.editDevice = function (id, name, type, onUrl, offUrl) {
+        this.editDevice = function (id, name, type, httpVerb, onUrl, offUrl, onUrlBody, offUrlBody) {
             this.device.id = id;
             this.device.name = name;
+            this.device.httpVerb = httpVerb;
             this.device.onUrl = onUrl;
             this.device.offUrl = offUrl;
+            this.device.onUrlBody = onUrlBody;
+            this.device.offUrlBody = offUrlBody;
         };
     }])
 
@@ -99,14 +108,14 @@ angular.module('configurator', [])
             bridgeService.viewDevices();
         };
         $scope.editDevice = function (device) {
-            bridgeService.editDevice(device.id, device.name, device.type, device.onUrl, device.offUrl);
+            bridgeService.editDevice(device.id, device.name, device.type, device.httpVerb, device.onUrl, device.offUrl, device.onUrlBody, device.offUrlBody);
         };
     }])
 
     .controller('AddingController', ["$scope", "bridgeService", function ($scope, bridgeService) {
 
         $scope.bridge = bridgeService.state;
-        $scope.device = {id: "", name: "", type: "switch", onUrl: "", offUrl: ""};
+        $scope.device = {id: "", name: "", type: "switch", httpVerb: "httpVerb", onUrl: "", offUrl: "", onUrlBody: "", offUrlBody: ""};
         $scope.vera = {base: "", port: "3480", id: ""};
         bridgeService.device = $scope.device;
 
@@ -127,12 +136,15 @@ angular.module('configurator', [])
         };
 
         $scope.addDevice = function () {
-            bridgeService.addDevice($scope.device.id, $scope.device.name, $scope.device.type, $scope.device.onUrl, $scope.device.offUrl).then(
+            bridgeService.addDevice($scope.device.id, $scope.device.name, $scope.device.type, $scope.device.httpVerb, $scope.device.onUrl, $scope.device.offUrl, $scope.device.onUrlBody, $scope.device.offUrlBody).then(
                 function () {
                     $scope.device.id = "";
                     $scope.device.name = "";
+                    $scope.device.httpVerb = "";
                     $scope.device.onUrl = "";
                     $scope.device.offUrl = "";
+                    $scope.device.onUrlBody = "";
+                    $scope.device.offUrlBody = "";
                 },
                 function (error) {
                 }

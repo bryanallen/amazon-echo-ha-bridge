@@ -146,6 +146,16 @@
                             </button>
                         </div>
                         <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 control-label" for="device-name">Type </label>
+
+                            <div class="col-xs-8 col-sm-7">
+                                <select id="device-http-verb" ng-model="device.httpVerb">
+                                	<option value="GET">GET</option>
+                                	<option value="POST">POST</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-xs-12 col-sm-2 control-label" for="device-on-url">On URL </label>
 
                             <div class="col-xs-8 col-sm-7">
@@ -157,6 +167,14 @@
                             </button>
                         </div>
                         <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 control-label" for="device-on-url">On URL Body </label>
+
+                            <div class="col-xs-8 col-sm-7">
+                                <input type="text" class="form-control" id="device-on-url-body" ng-model="device.onUrlBody"
+                                       placeholder="Request arguments">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-xs-12 col-sm-2 control-label" for="device-off-url">Off URL </label>
 
                             <div class="col-xs-8 col-sm-7">
@@ -166,6 +184,14 @@
                             <button class="col-xs-4 col-sm-2 btn btn-success" type="button"
                                     ng-click="testUrl(device.offUrl)">Test
                             </button>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 control-label" for="device-on-url">Off URL Body </label>
+
+                            <div class="col-xs-8 col-sm-7">
+                                <input type="text" class="form-control" id="device-off-url-body" ng-model="device.offUrlBody"
+                                       placeholder="Request arguments">
+                            </div>
                         </div>
                     </form>
                 </li>

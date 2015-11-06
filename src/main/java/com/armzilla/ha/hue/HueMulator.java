@@ -137,21 +137,26 @@ public class HueMulator {
 
         String responseString;
         String url;
+        String body;
+        
         if (state.isOn()) {
             responseString = "[{\"success\":{\"/lights/" + lightId + "/state/on\":true}}]";
             url = device.getOnUrl();
+            body = replaceIntensityValue(device.getOnUrlBody(), state.getBri());
         } else {
             responseString = "[{\"success\":{\"/lights/" + lightId + "/state/on\":false}}]";
             url = device.getOffUrl();
+            body = replaceIntensityValue(device.getOffUrlBody(), state.getBri());
         }
 
         //quick template
         url = replaceIntensityValue(url, state.getBri());
-        String body = replaceIntensityValue(device.getContentBody(), state.getBri());
+
         //make call
         if(!doHttpRequest(url, device.getHttpVerb(), device.getContentType(), body)){
             return new ResponseEntity<>(null, null, HttpStatus.SERVICE_UNAVAILABLE);
         }
+
 
         HttpHeaders headerMap = new HttpHeaders();
 
