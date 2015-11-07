@@ -84,12 +84,14 @@
                     <td>{{device.name}}</td>
                     <td>{{device.deviceType}}</td>
                     <td width="360px">
-                        <button class="btn btn-info" type="submit" ng-click="testUrl(device.httpVerb, device.onUrl, device.onUrlBody)">ON</button>
-                        <button class="btn btn-info" type="submit" ng-click="testUrl(device.httpVerb, device.offUrl, device.offUrlBody)">OFF</button>
+                        <button class="btn btn-info" type="submit"
+                        	ng-click="testUrl(device.name, device.httpVerb, device.onUrl, device.onUrlBody, device.contentType)">ON</button>
+                        <button class="btn btn-info" type="submit"
+                        	ng-click="testUrl(device.name, device.httpVerb, device.offUrl, device.offUrlBody, device.contentType)">OFF</button>
                         <button class="btn btn-danger" type="submit" ng-click="editDevice(device)">Edit</button>
                         <button class="btn btn-danger" type="submit" ng-click="deleteDevice(device)">Delete</button>
-                        <button class="btn btn-link pull-right" ng-show="testSuccess" style="color:blue">Success</button>
-                        <button class="btn btn-link pull-right" ng-show="testFail" style="color:red">Fail</button>
+                        <button class="btn btn-link pull-right" ng-show="testSuccess == device.name" style="color:blue">Success</button>
+                        <button class="btn btn-link pull-right" ng-show="testFail == device.name" style="color:red">Fail</button>
                     </td>
                 </tr>
             </table>
@@ -136,6 +138,15 @@
                 </li>
                 <li class="list-group-item">
                     <form class="form-horizontal" ng-submit="addDevice()">
+                   
+                        <div class="form-group">
+                    		<label class="col-xs-12 col-sm-2 control-label" for="showAdvancedFormCheckbox">Advanced</label>
+                    		
+                    		<div class="col-xs-8 col-sm-7">
+                    			<input type="checkbox" ng-model="showAdvancedFormCheckbox"></input> 
+                    		</div>
+                   		</div>
+					
                         <div class="form-group">
                             <label class="col-xs-12 col-sm-2 control-label" for="device-name">Name </label>
 
@@ -147,14 +158,22 @@
                                 {{device.id ? 'Update' : 'Add' }} Device
                             </button>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-show="showAdvancedFormCheckbox">
                             <label class="col-xs-12 col-sm-2 control-label" for="device-name">Type </label>
 
                             <div class="col-xs-8 col-sm-7">
                                 <select id="device-http-verb" ng-model="device.httpVerb">
-                                	<option value="GET">GET</option>
+                                	<option value="GET" selected>GET</option>
                                 	<option value="POST">POST</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="showAdvancedFormCheckbox">
+                            <label class="col-xs-12 col-sm-2 control-label" for="device-name">Content Type </label>
+
+                            <div class="col-xs-8 col-sm-7">
+                                <input type="text" class="form-control" id="content-type" ng-model="device.contentType"
+                                       placeholder="Content type">
                             </div>
                         </div>
                         <div class="form-group">
@@ -164,11 +183,11 @@
                                 <input type="text" class="form-control" id="device-on-url" ng-model="device.onUrl"
                                        placeholder="URL to turn device on">
                             </div>
-                            <button class="col-xs-4 col-sm-2 btn btn-success" type="button"
+                            <button class="col-xs-4 col-sm-2 btn btn-success" type="button" ng-hide="showAdvancedFormCheckbox"
                                     ng-click="testUrl(device.onUrl)">Test
                             </button>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-show="showAdvancedFormCheckbox">
                             <label class="col-xs-12 col-sm-2 control-label" for="device-on-url">On URL Body </label>
 
                             <div class="col-xs-8 col-sm-7">
@@ -183,11 +202,11 @@
                                 <input type="text" class="form-control" id="device-off-url" ng-model="device.offUrl"
                                        placeholder="URL to turn device off">
                             </div>
-                            <button class="col-xs-4 col-sm-2 btn btn-success" type="button"
+                            <button class="col-xs-4 col-sm-2 btn btn-success" type="button" ng-hide="showAdvancedFormCheckbox"
                                     ng-click="testUrl(device.offUrl)">Test
                             </button>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-show="showAdvancedFormCheckbox">
                             <label class="col-xs-12 col-sm-2 control-label" for="device-on-url">Off URL Body </label>
 
                             <div class="col-xs-8 col-sm-7">

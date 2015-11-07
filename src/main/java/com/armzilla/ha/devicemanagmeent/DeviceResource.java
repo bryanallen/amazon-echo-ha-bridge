@@ -78,7 +78,7 @@ public class DeviceResource {
     }
 
     @RequestMapping(value = "/{lightId}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<DeviceDescriptor> findByDevicId(@PathVariable("lightId") String id){
+    public ResponseEntity<DeviceDescriptor> findByDeviceId(@PathVariable("lightId") String id){
         DeviceDescriptor descriptor = deviceRepository.findOne(id);
         if(descriptor == null){
             return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);

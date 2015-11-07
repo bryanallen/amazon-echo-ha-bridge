@@ -21,7 +21,7 @@ angular.module('configurator', [])
             );
         };
 
-        this.addDevice = function (id, name, type, httpVerb, onUrl, offUrl, onUrlBody, offUrlBody) {
+        this.addDevice = function (id, name, type, httpVerb, onUrl, offUrl, onUrlBody, offUrlBody, contentType) {
             this.state.error = "";
             if (id) {
                 var putUrl = this.state.base + "/" + id;
@@ -34,7 +34,7 @@ angular.module('configurator', [])
                     offUrl: offUrl,
                     onUrlBody: onUrlBody,
                     offUrlBody: offUrlBody,
-                    contentType: "application/json"
+                    contentType: contentType
                 }).then(
                     function (response) {
                         self.viewDevices();
@@ -55,7 +55,7 @@ angular.module('configurator', [])
                     offUrl: offUrl,
                     onUrlBody: onUrlBody,
                     offUrlBody: offUrlBody,
-                    contentType: "application/json"
+                    contentType: contentType
                 }).then(
                     function (response) {
                         self.viewDevices();
@@ -85,43 +85,54 @@ angular.module('configurator', [])
             );
         };
 
-        this.editDevice = function (id, name, type, httpVerb, onUrl, offUrl, onUrlBody, offUrlBody) {
+        this.editDevice = function (id, name, type, httpVerb, onUrl, offUrl, onUrlBody, offUrlBody, contentType) {
             this.device.id = id;
             this.device.name = name;
             this.device.httpVerb = httpVerb;
             this.device.onUrl = onUrl;
             this.device.offUrl = offUrl;
             this.device.onUrlBody = onUrlBody;
-            this.device.offUrlBody = offUrlBody;
+            this.device.offUrlBody = offUrlBody,
+            this.device.contentType = contentType
         };
     }])
 
     .controller('ViewingController', ["$scope", "$http", "$timeout", "bridgeService", function ($scope, $http, $timeout, bridgeService) {
         bridgeService.viewDevices();
-        $scope.testSuccess = false;
-        $scope.testFail = false;
+
+        $scope.testFeedbackDisplayTime = 2000;
+        $scope.testSuccess = "";
+        $scope.testFail = "";
+        $scope.showSuccess = function(name) {
+        	$scope.testSuccess = name;
+            $timeout(function() { $scope.testSuccess = ""; }, $scope.testFeedbackDisplayTime);
+        };
+        $scope.showFail = function(name) {
+        	$scope.testFail = name;
+            $timeout(function() { $scope.testFail = ""; }, $scope.testFeedbackDisplayTime);
+        };
+        
         $scope.bridge = bridgeService.state;
         $scope.deleteDevice = function (device) {
             bridgeService.deleteDevice(device.id);
         };
-        $scope.testUrl = function (httpVerb, url, body) {
+        $scope.testUrl = function (name, httpVerb, url, body, contentType) {
         	if (httpVerb == "POST") {
         		$http({
         		    method: 'POST',
         		    url: url,
-        		    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        		    headers: {'Content-Type': contentType},
         		    data: body
         		}).then(function successCallback(response) {
-        			$scope.testSuccess = true;
-		            $timeout(function() { $scope.testSuccess = false; }, 3000);
+		            $scope.showSuccess(name);
         		  }, function errorCallback(response) {
-          			$scope.testFail = true;
-  		            $timeout(function() { $scope.testSuccess = false; }, 3000);
+  		            $scope.showFail(name);
         		  });
         	} else {
-		    	$http.get(url).success(function(data, status) {
-		            $scope.testSuccess = true;
-		            $timeout(function() { $scope.testSuccess = false; }, 3000);
+		    	$http.get(url).then(function(data, status) {
+		            $scope.showSuccess(name);
+		        }, function(data, status) {
+		            $scope.showFail(name);
 		        });
         	}
         };
@@ -130,16 +141,18 @@ angular.module('configurator', [])
             bridgeService.viewDevices();
         };
         $scope.editDevice = function (device) {
-            bridgeService.editDevice(device.id, device.name, device.type, device.httpVerb, device.onUrl, device.offUrl, device.onUrlBody, device.offUrlBody);
+            bridgeService.editDevice(device.id, device.name, device.type, device.httpVerb, device.onUrl, device.offUrl, device.onUrlBody, device.offUrlBody, device.contentType);
         };
     }])
 
     .controller('AddingController', ["$scope", "bridgeService", function ($scope, bridgeService) {
 
         $scope.bridge = bridgeService.state;
-        $scope.device = {id: "", name: "", type: "switch", httpVerb: "httpVerb", onUrl: "", offUrl: "", onUrlBody: "", offUrlBody: ""};
+        $scope.device = {id: "", name: "", type: "switch", httpVerb: "httpVerb", onUrl: "", offUrl: "", onUrlBody: "", offUrlBody: "", contentType: ""};
         $scope.vera = {base: "", port: "3480", id: ""};
         bridgeService.device = $scope.device;
+        
+        $scope.showAdvancedFormCheckbox = false;
 
         $scope.buildUrls = function () {
             if ($scope.vera.base.indexOf("http") < 0) {
@@ -158,7 +171,9 @@ angular.module('configurator', [])
         };
 
         $scope.addDevice = function () {
-            bridgeService.addDevice($scope.device.id, $scope.device.name, $scope.device.type, $scope.device.httpVerb, $scope.device.onUrl, $scope.device.offUrl, $scope.device.onUrlBody, $scope.device.offUrlBody).then(
+            bridgeService.addDevice($scope.device.id, $scope.device.name, $scope.device.type, $scope.device.httpVerb,
+            		$scope.device.onUrl, $scope.device.offUrl, $scope.device.onUrlBody, $scope.device.offUrlBody,
+            		$scope.device.contentType).then(
                 function () {
                     $scope.device.id = "";
                     $scope.device.name = "";
@@ -167,6 +182,7 @@ angular.module('configurator', [])
                     $scope.device.offUrl = "";
                     $scope.device.onUrlBody = "";
                     $scope.device.offUrlBody = "";
+                    $scope.device.contentType = "";
                 },
                 function (error) {
                 }
