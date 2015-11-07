@@ -64,6 +64,7 @@ public class DeviceResource {
         deviceEntry.setOnUrlBody(device.getOnUrlBody());
         deviceEntry.setOffUrlBody(device.getOffUrlBody());
         deviceEntry.setHttpVerb(device.getHttpVerb());
+        deviceEntry.setContentType(device.getContentType());
 
         deviceRepository.save(deviceEntry);
 
